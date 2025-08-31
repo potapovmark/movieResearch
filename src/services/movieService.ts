@@ -113,7 +113,7 @@ export async function getRatedMovies(
     const ratings = storedRatings ? JSON.parse(storedRatings) : {};
 
     const ratedMovieIds = Object.keys(ratings).map(Number);
-    
+
     if (ratedMovieIds.length === 0) {
       return {
         page: 1,

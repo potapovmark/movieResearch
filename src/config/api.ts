@@ -1,0 +1,7 @@
+export const API_CONFIG = {
+  BASE_URL: 'https://api.themoviedb.org/3',
+  API_KEY: 'e7acd97548f22cb1ea53a93e492bced4',
+  BEARER_TOKEN:
+    'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlN2FjZDk3NTQ4ZjIyY2IxZWE1M2E5M2U0OTJiY2VkNCIsIm5iZiI6MTc1NjUwMjU2MC4wNDYwMDAyLCJzdWIiOiI2OGIyMWEyMGE2OTQ2ZGJhNTA1NGRhNTEiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.zPnN5dvNYZylEYbgTbTBfLw7-_qbSQ0m3NfLIjcdf5U',
+  IMAGE_BASE_URL: 'https://image.tmdb.org/t/p/w500',
+};

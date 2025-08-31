@@ -1,0 +1,88 @@
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.tabs {
+  margin-top: 24px;
+}
+
+.ratedContainer {
+  padding: 24px 0;
+}
+
+.ratedTitle {
+  font-size: 24px;
+  font-weight: 600;
+  color: #262626;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 20px;
+  color: #8c8c8c;
+  font-size: 16px;
+}
+
+.errorContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 20px;
+  color: #ff4d4f;
+  font-size: 16px;
+  text-align: center;
+}
+
+.emptyContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 20px;
+  color: #8c8c8c;
+  font-size: 16px;
+  text-align: center;
+}
+
+.emptyContainer p:first-child {
+  font-size: 18px;
+  margin-bottom: 8px;
+  color: #595959;
+}
+
+.paginationContainer {
+  text-align: center;
+  margin-top: 24px;
+  padding: 16px;
+  background-color: #fafafa;
+  border-radius: 8px;
+  color: #8c8c8c;
+}
+
+.paginationContainer p {
+  margin: 4px 0;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 16px;
+  }
+  
+  .ratedTitle {
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+  
+  .loadingContainer,
+  .errorContainer,
+  .emptyContainer {
+    padding: 40px 16px;
+  }
+}

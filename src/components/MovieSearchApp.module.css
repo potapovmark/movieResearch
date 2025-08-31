@@ -1,0 +1,49 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.title {
+  text-align: center;
+  color: #333;
+  margin-bottom: 30px;
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+.tabs {
+  margin-bottom: 30px;
+}
+
+.searchContainer {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.searchInput {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.loadingContainer {
+  text-align: center;
+  padding: 50px;
+}
+
+.loadingContainer p {
+  margin-top: 20px;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.errorAlert {
+  margin-bottom: 20px;
+}
+
+.paginationContainer {
+  text-align: center;
+  margin-top: 40px;
+  padding: 20px 0;
+}
+

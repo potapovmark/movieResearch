@@ -16,10 +16,10 @@ export default function MovieList({ movies, genres, showUserRating = false }: Mo
   return (
     <div className={styles.movieList}>
       {movies.map((movie) => (
-        <MovieCard 
-          key={movie.id} 
-          movie={movie} 
-          genres={genres} 
+        <MovieCard
+          key={movie.id}
+          movie={movie}
+          genres={genres}
           showUserRating={showUserRating}
         />
       ))}

@@ -74,12 +74,12 @@
   .container {
     padding: 0 16px;
   }
-  
+
   .ratedTitle {
     font-size: 20px;
     margin-bottom: 16px;
   }
-  
+
   .loadingContainer,
   .errorContainer,
   .emptyContainer {

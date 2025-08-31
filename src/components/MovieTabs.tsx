@@ -1,7 +1,7 @@
 'use client';
 
 import { Tabs, TabsProps, Pagination } from 'antd';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAppContext } from '@/contexts/AppContext';
 import { usePopularMovies, useRatedMovies } from '@/hooks/useMovies';
 import MovieList from './MovieList';
@@ -15,16 +15,29 @@ export default function MovieTabs() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const { data: popularData, isLoading: popularLoading } = usePopularMovies(currentPage);
-  const { data: ratedData, isLoading: ratedLoading } = useRatedMovies(
+  const { data: ratedData, isLoading: ratedLoading, refetch: refetchRated } = useRatedMovies(
     session?.guest_session_id || '',
     currentPage
   );
+
+  useEffect(() => {
+    const handleRatingUpdate = () => {
+      if (activeTab === 'rated' && session?.guest_session_id) {
+        refetchRated();
+      }
+    };
+
+    window.addEventListener('ratingUpdated', handleRatingUpdate as EventListener);
+    return () => window.removeEventListener('ratingUpdated', handleRatingUpdate as EventListener);
+  }, [activeTab, session?.guest_session_id, refetchRated]);
 
   const handleTabChange = (key: string) => {
     setActiveTab(key);
     setCurrentPage(1);
     if (key === 'search') {
       setSearchQuery('');
+    } else if (key === 'rated' && session?.guest_session_id) {
+      refetchRated();
     }
   };
 

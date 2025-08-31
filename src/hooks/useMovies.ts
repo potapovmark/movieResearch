@@ -77,13 +77,35 @@ export function useRateMovie() {
         { queryKey: ['movies', 'rated'] },
         (oldData: MovieResponse | undefined) => {
           if (!oldData) return oldData;
+          const updatedResults = oldData.results.map((movie: Movie) =>
+            movie.id === movieId
+              ? { ...movie, rating: rating }
+              : movie
+          );
+
+          if (rating > 0) {
+            if (!oldData.results.find(movie => movie.id === movieId)) {
+              const popularData = queryClient.getQueryData(['movies', 'popular']) as MovieResponse | undefined;
+              if (popularData) {
+                const movieToAdd = popularData.results.find(movie => movie.id === movieId);
+                if (movieToAdd) {
+                  updatedResults.push({ ...movieToAdd, rating });
+                }
+              }
+            }
+          } else {
+            const filteredResults = updatedResults.filter(movie => movie.id !== movieId);
+            return {
+              ...oldData,
+              results: filteredResults,
+              total_results: filteredResults.length
+            };
+          }
+
           return {
             ...oldData,
-            results: oldData.results.map((movie: Movie) =>
-              movie.id === movieId
-                ? { ...movie, rating: rating }
-                : movie
-            )
+            results: updatedResults,
+            total_results: updatedResults.length
           };
         }
       );
@@ -123,11 +145,16 @@ export function useRateMovie() {
         window.dispatchEvent(new CustomEvent('ratingUpdated', {
           detail: { movieId, rating }
         }));
+
+        queryClient.invalidateQueries({ queryKey: ['movies', 'rated'] });
       } catch (error) {
         console.error('Error updating localStorage:', error);
       }
     },
     onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['movies', 'popular'] });
+      queryClient.invalidateQueries({ queryKey: ['movies', 'search'] });
+      queryClient.invalidateQueries({ queryKey: ['movies', 'rated'] });
     },
   });
 }

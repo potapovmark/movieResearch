@@ -112,23 +112,58 @@ export async function getRatedMovies(
     const storedRatings = localStorage.getItem('movie_ratings');
     const ratings = storedRatings ? JSON.parse(storedRatings) : {};
 
-    const popularMovies = await getPopularMovies(page);
+    const ratedMovieIds = Object.keys(ratings).map(Number);
+    
+    if (ratedMovieIds.length === 0) {
+      return {
+        page: 1,
+        results: [],
+        total_pages: 1,
+        total_results: 0
+      };
+    }
 
-    const moviesWithRatings = popularMovies.results.map(movie => ({
-      ...movie,
-      rating: ratings[movie.id] || undefined
-    }));
+    const allRatedMovies = [];
+    const moviesPerPage = 20;
+    const startIndex = (page - 1) * moviesPerPage;
+    const endIndex = startIndex + moviesPerPage;
 
-    const ratedMovies = moviesWithRatings.filter(movie => movie.rating);
+    for (const movieId of ratedMovieIds) {
+      try {
+        const movieResponse = await fetchWithTimeout(
+          `${API_CONFIG.BASE_URL}/movie/${movieId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${API_CONFIG.BEARER_TOKEN}`,
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+
+        if (movieResponse.ok) {
+          const movieData = await movieResponse.json();
+          allRatedMovies.push({
+            ...movieData,
+            rating: ratings[movieId]
+          });
+        }
+      } catch (error) {
+        console.warn(`Failed to fetch movie ${movieId}:`, error);
+      }
+    }
+
+    const paginatedResults = allRatedMovies.slice(startIndex, endIndex);
+    const totalPages = Math.ceil(allRatedMovies.length / moviesPerPage);
 
     return {
-      ...popularMovies,
-      results: ratedMovies,
-      total_results: ratedMovies.length
+      page,
+      results: paginatedResults,
+      total_pages: totalPages,
+      total_results: allRatedMovies.length
     };
   } catch (error) {
-    console.error('Error getting rated movies from localStorage:', error);
-    throw new Error('Failed to get rated movies from local storage');
+    console.error('Error getting rated movies:', error);
+    throw new Error('Failed to get rated movies');
   }
 }
 

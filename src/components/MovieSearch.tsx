@@ -44,7 +44,7 @@ export default function MovieSearch({
     return storedRatings ? JSON.parse(storedRatings) : {};
   };
 
-  // Используем начальные данные если нет поискового запроса и это первая страница
+
   const shouldUseInitialData = !query.trim() && currentPage === 1 && initialMovies;
 
   const movies = (shouldUseInitialData

@@ -108,7 +108,7 @@ export default function MovieTabs({
                     <div className={styles.paginationContainer}>
                       <Pagination
                         current={currentPage}
-                        total={100}
+                        total={ratedData.total_results}
                         pageSize={20}
                         onChange={handlePageChange}
                         showSizeChanger={false}

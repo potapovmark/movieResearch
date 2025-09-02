@@ -101,7 +101,7 @@ export default function MovieCard({ movie, genres, showUserRating = false }: Mov
     }
   };
 
-  return (
+    return (
     <Card className={styles.movieCard}>
       <div className={styles.cardContainer}>
         <div className={styles.posterContainer}>
@@ -163,6 +163,25 @@ export default function MovieCard({ movie, genres, showUserRating = false }: Mov
             </div>
           )}
         </div>
+      </div>
+
+
+      <div className={styles.bottomContent}>
+        <p className={styles.overview}>
+          {truncateText(movie.overview, 150)}
+        </p>
+
+        {showUserRating && (
+          <div className={styles.ratingContainer}>
+            <Rate
+              value={localRating}
+              onChange={handleRatingChange}
+              disabled={rateMovieMutation.isPending}
+              allowClear={false}
+              count={10}
+            />
+          </div>
+        )}
       </div>
     </Card>
   );

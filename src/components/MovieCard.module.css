@@ -7,6 +7,12 @@
   padding: 0;
 }
 
+@media (min-width: 1082px) {
+  .movieCard {
+    height: 280px;
+  }
+}
+
 .movieCard:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
@@ -18,6 +24,46 @@
 .cardContainer {
   display: flex;
   gap: 1rem;
+  padding: 16px;
+}
+
+
+@media (min-width: 1082px) {
+  .cardContainer {
+    flex-direction: row;
+    gap: 0;
+    padding: 0;
+    height: 280px;
+  }
+
+  .contentContainer {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    height: 100%;
+  }
+
+  .overview {
+    margin-bottom: 0.75rem;
+    flex: 1;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    -webkit-box-orient: vertical;
+    line-height: 1.4;
+    font-size: clamp(12px, 1vw, 14px);
+  }
+
+  .ratingContainer {
+    margin-top: auto;
+    align-items: flex-start;
+    flex-shrink: 0;
+  }
+
+  .bottomContent {
+    display: none !important;
+  }
 }
 
 .posterContainer {
@@ -59,6 +105,105 @@
   color: #1f2937;
   margin-bottom: 0.25rem;
   line-height: 2.2;
+}
+
+
+@media (max-width: 1082px) {
+  .cardContainer {
+    flex-direction: row;
+    gap: 0.75rem;
+    padding: 12px;
+
+    align-items: flex-start;
+  }
+
+  .posterContainer {
+    flex-shrink: 0;
+  }
+
+  .poster {
+    width: 60px;
+    height: 90px;
+  }
+
+  .headerContainer {
+    height: 1.75rem;
+  }
+
+  .contentContainer {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 50px;
+  }
+
+  .title {
+    font-size: 1rem;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+  }
+
+  .apiRatingCircle {
+    width: 24px;
+    height: 24px;
+    font-size: 10px;
+  }
+
+  .releaseDate {
+    font-size: 0.75rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .genresContainer {
+    margin-bottom: 0.5rem;
+  }
+
+  .genreTag {
+    font-size: 10px;
+    padding: 1px 6px;
+    margin-right: 0.25rem;
+  }
+
+
+  .contentContainer .overview,
+  .contentContainer .ratingContainer {
+    display: none;
+  }
+
+  .overview {
+    font-size: 12px;
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
+  }
+
+  .ratingContainer {
+    margin-top: 8px;
+    align-items: flex-end;
+    gap: 4px;
+  }
+
+
+  .bottomContent {
+    display: block !important;
+    margin-top: 0.75rem;
+    padding: 0 12px 12px 12px;
+  }
+
+
+  .bottomContent .overview {
+    display: block !important;
+    font-size: 12px;
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
+  }
+
+  .bottomContent .ratingContainer {
+    display: flex !important;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    margin-top: 8px;
+  }
 }
 
 .ratingsContainer {
@@ -115,6 +260,11 @@
 
 .stars {
   color: #f59e0b;
+}
+
+.bottomContent {
+  padding: 0 16px 16px 16px;
+  display: none;
 }
 
 .ratingContainer {

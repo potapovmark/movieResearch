@@ -3,13 +3,10 @@
 import { Input, Pagination, Spin } from 'antd';
 
 
-import { SearchOutlined } from '@ant-design/icons';
 import { useSearchMovies, usePopularMovies } from '@/hooks/useMovies';
 import { useAppContext } from '@/contexts/AppContext';
 import MovieList from './MovieList';
 import styles from './MovieSearch.module.css';
-
-const { Search } = Input;
 
 interface MovieSearchProps {
   query: string;
@@ -19,6 +16,8 @@ interface MovieSearchProps {
   totalPages: number;
   totalResults: number;
   loading: boolean;
+  initialMovies?: import('@/types/movie').MovieResponse;
+  initialGenres?: import('@/types/movie').Genre[];
 }
 
 export default function MovieSearch({
@@ -28,7 +27,9 @@ export default function MovieSearch({
   onPageChange,
   totalPages,
   totalResults,
-  loading
+  loading,
+  initialMovies,
+  initialGenres
 }: MovieSearchProps) {
   const { genres } = useAppContext();
 
@@ -43,7 +44,15 @@ export default function MovieSearch({
     return storedRatings ? JSON.parse(storedRatings) : {};
   };
 
-  const movies = (query.trim() ? searchData?.results || [] : popularData?.results || []).map(movie => {
+  // Используем начальные данные если нет поискового запроса и это первая страница
+  const shouldUseInitialData = !query.trim() && currentPage === 1 && initialMovies;
+
+  const movies = (shouldUseInitialData
+    ? initialMovies.results
+    : query.trim()
+      ? searchData?.results || []
+      : popularData?.results || []
+  ).map(movie => {
     const ratings = getStoredRatings();
     return {
       ...movie,
@@ -51,8 +60,16 @@ export default function MovieSearch({
     };
   });
 
-  const totalPagesToShow = query.trim() ? searchData?.total_pages || 0 : totalPages;
-  const totalResultsToShow = query.trim() ? searchData?.total_results || 0 : totalResults;
+  const totalPagesToShow = shouldUseInitialData
+    ? initialMovies.total_pages
+    : query.trim()
+      ? searchData?.total_pages || 0
+      : totalPages;
+  const totalResultsToShow = shouldUseInitialData
+    ? initialMovies.total_results
+    : query.trim()
+      ? searchData?.total_results || 0
+      : totalResults;
 
   const handleSearch = (value: string) => {
     onQueryChange(value);
@@ -66,14 +83,13 @@ export default function MovieSearch({
   return (
     <div className={styles.container}>
       <div className={styles.searchContainer}>
-        <Search
-          placeholder="Search for movies..."
+        <Input
+          placeholder="Type to search..."
           allowClear
-          enterButton={<SearchOutlined />}
           size="large"
           value={query}
           onChange={(e) => onQueryChange(e.target.value)}
-          onSearch={handleSearch}
+          onPressEnter={(e) => handleSearch((e.target as HTMLInputElement).value)}
           className={styles.searchInput}
         />
       </div>
@@ -92,18 +108,24 @@ export default function MovieSearch({
             </div>
           ) : (
             <>
-              <MovieList movies={movies} genres={genres} showUserRating={true} />
+              <MovieList
+                movies={movies}
+                genres={initialGenres || genres}
+                showUserRating={true}
+              />
 
               {totalPagesToShow > 1 && (
                 <div className={styles.paginationContainer}>
-                  <Pagination
-                    current={currentPage}
-                    total={totalResultsToShow}
-                    pageSize={20}
-                    onChange={handlePageChange}
-                    showSizeChanger={false}
-                    showQuickJumper
-                  />
+                                      <Pagination
+                      current={currentPage}
+                      total={100}
+                      pageSize={20}
+                      onChange={handlePageChange}
+                      showSizeChanger={false}
+                      showQuickJumper={false}
+                      showLessItems={true}
+                      size="default"
+                    />
                 </div>
               )}
             </>

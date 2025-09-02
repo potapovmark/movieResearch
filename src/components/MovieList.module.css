@@ -1,11 +1,20 @@
 .movieList {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr;
   gap: 1rem;
+}
+
+/* На широких экранах - 2 карточки в ряд */
+@media (min-width: 768px) {
+  .movieList {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
 }
 
 .emptyState {
   text-align: center;
   color: #6b7280;
   padding: 2rem 0;
+  grid-column: 1 / -1;
 }

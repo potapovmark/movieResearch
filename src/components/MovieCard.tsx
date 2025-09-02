@@ -2,6 +2,7 @@
 
 import { Card, Tag, Rate, Tooltip } from 'antd';
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { Movie, Genre } from '@/types/movie';
 import { formatDate } from '@/utils/dateUtils';
 import { truncateText } from '@/utils/textUtils';
@@ -19,13 +20,16 @@ export default function MovieCard({ movie, genres, showUserRating = false }: Mov
   const { session, updateRating } = useAppContext();
   const rateMovieMutation = useRateMovie();
   const [localRating, setLocalRating] = useState(0);
+  const [hasUserRated, setHasUserRated] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const storedRatings = localStorage.getItem('movie_ratings');
       if (storedRatings) {
         const ratings = JSON.parse(storedRatings);
-        setLocalRating(ratings[movie.id] || 0);
+        const userRating = ratings[movie.id] || 0;
+        setLocalRating(userRating);
+        setHasUserRated(userRating > 0);
       }
     }
   }, [movie.id]);
@@ -35,7 +39,9 @@ export default function MovieCard({ movie, genres, showUserRating = false }: Mov
       if (e.key === 'movie_ratings' && e.newValue) {
         try {
           const ratings = JSON.parse(e.newValue);
-          setLocalRating(ratings[movie.id] || 0);
+          const userRating = ratings[movie.id] || 0;
+          setLocalRating(userRating);
+          setHasUserRated(userRating > 0);
         } catch (error) {
           console.error('Error parsing storage change:', error);
         }
@@ -45,6 +51,7 @@ export default function MovieCard({ movie, genres, showUserRating = false }: Mov
     const handleRatingUpdate = (e: CustomEvent) => {
       if (e.detail.movieId === movie.id) {
         setLocalRating(e.detail.rating);
+        setHasUserRated(e.detail.rating > 0);
       }
     };
 
@@ -77,6 +84,7 @@ export default function MovieCard({ movie, genres, showUserRating = false }: Mov
     if (!session) return;
 
     setLocalRating(value);
+    setHasUserRated(value > 0);
 
     updateRating(movie.id, value);
 
@@ -89,6 +97,7 @@ export default function MovieCard({ movie, genres, showUserRating = false }: Mov
     } catch (error) {
       console.error('Error rating movie:', error);
       setLocalRating(movie.rating || 0);
+      setHasUserRated((movie.rating || 0) > 0);
     }
   };
 
@@ -97,9 +106,11 @@ export default function MovieCard({ movie, genres, showUserRating = false }: Mov
       <div className={styles.cardContainer}>
         <div className={styles.posterContainer}>
           {posterUrl ? (
-            <img
+            <Image
               src={posterUrl}
               alt={movie.title}
+              width={120}
+              height={180}
               className={styles.poster}
             />
           ) : (
@@ -113,12 +124,12 @@ export default function MovieCard({ movie, genres, showUserRating = false }: Mov
           <div className={styles.headerContainer}>
             <h3 className={styles.title}>{movie.title}</h3>
             <div className={styles.ratingsContainer}>
-              <Tooltip title="Average rating">
+              <Tooltip title={hasUserRated ? "Your rating" : "No rating yet"}>
                 <div
                   className={styles.apiRatingCircle}
-                  style={{ backgroundColor: getRatingColor(movie.vote_average) }}
+                  style={{ borderColor: hasUserRated ? getRatingColor(localRating) : '#ccc' }}
                 >
-                  {movie.vote_average.toFixed(1)}
+                  {hasUserRated ? localRating.toFixed(1) : '0'}
                 </div>
               </Tooltip>
             </div>
@@ -149,9 +160,6 @@ export default function MovieCard({ movie, genres, showUserRating = false }: Mov
                 allowClear={false}
                 count={10}
               />
-              <span className={styles.ratingText}>
-                {localRating > 0 ? `Your rating: ${localRating}/10` : 'Rate this movie'}
-              </span>
             </div>
           )}
         </div>

@@ -1,6 +1,18 @@
 .movieCard {
-  margin-bottom: 1rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  margin-bottom: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+  padding: 0;
+}
+
+.movieCard:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.movieCard :global(.ant-card-body) {
+  padding: 0;
 }
 
 .cardContainer {
@@ -13,9 +25,9 @@
 }
 
 .poster {
-  border-radius: 0.25rem;
-  width: 120px;
-  height: 180px;
+  width: 180px;
+  height: 280px;
+  object-fit: cover;
 }
 
 .noPoster {
@@ -46,6 +58,7 @@
   font-weight: 600;
   color: #1f2937;
   margin-bottom: 0.25rem;
+  line-height: 2.2;
 }
 
 .ratingsContainer {
@@ -61,10 +74,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: #333;
   font-weight: 600;
   font-size: 12px;
   flex-shrink: 0;
+  background-color: transparent;
+  border: 2px solid;
 }
 
 .rating :global(.ant-badge .ant-scroll-number) {
@@ -85,11 +100,17 @@
 
 .genreTag {
   margin-right: 0.5rem;
+  margin-bottom: 0.25rem;
+  border-radius: 4px;
+  font-size: 12px;
+  padding: 2px 8px;
 }
 
 .overview {
   color: #374151;
   margin-bottom: 0.75rem;
+  line-height: 1.5;
+  font-size: 14px;
 }
 
 .stars {
@@ -108,4 +129,8 @@
   font-size: 12px;
   color: #8c8c8c;
   margin-left: 4px;
+}
+
+.ratingsContainer {
+  padding: 10px;
 }

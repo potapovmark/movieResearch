@@ -4,15 +4,28 @@ import { Tabs, TabsProps, Pagination } from 'antd';
 import { useState, useEffect } from 'react';
 import { useAppContext } from '@/contexts/AppContext';
 import { usePopularMovies, useRatedMovies } from '@/hooks/useMovies';
+import { Genre, MovieResponse } from '@/types/movie';
 import MovieList from './MovieList';
 import MovieSearch from './MovieSearch';
 import styles from './MovieTabs.module.css';
 
-export default function MovieTabs() {
+interface MovieTabsProps {
+  initialMovies?: MovieResponse;
+  initialGenres?: Genre[];
+  initialQuery?: string;
+  initialPage?: number;
+}
+
+export default function MovieTabs({
+  initialMovies,
+  initialGenres,
+  initialQuery = '',
+  initialPage = 1
+}: MovieTabsProps) {
   const { session, genres, loading: contextLoading } = useAppContext();
   const [activeTab, setActiveTab] = useState('search');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState(initialQuery);
+  const [currentPage, setCurrentPage] = useState(initialPage);
 
   const { data: popularData, isLoading: popularLoading } = usePopularMovies(currentPage);
   const { data: ratedData, isLoading: ratedLoading, refetch: refetchRated } = useRatedMovies(
@@ -56,9 +69,11 @@ export default function MovieTabs() {
           onQueryChange={setSearchQuery}
           currentPage={currentPage}
           onPageChange={handlePageChange}
-          totalPages={popularData?.total_pages || 0}
-          totalResults={popularData?.total_results || 0}
+          totalPages={popularData?.total_pages || initialMovies?.total_pages || 0}
+          totalResults={popularData?.total_results || initialMovies?.total_results || 0}
           loading={popularLoading}
+          initialMovies={initialMovies}
+          initialGenres={initialGenres}
         />
       ),
     },
@@ -93,11 +108,13 @@ export default function MovieTabs() {
                     <div className={styles.paginationContainer}>
                       <Pagination
                         current={currentPage}
-                        total={ratedData.total_results}
+                        total={100}
                         pageSize={20}
                         onChange={handlePageChange}
                         showSizeChanger={false}
-                        showQuickJumper
+                        showQuickJumper={false}
+                        showLessItems={true}
+                        size="default"
                       />
                     </div>
                   )}

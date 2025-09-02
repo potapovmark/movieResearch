@@ -9,8 +9,8 @@
 }
 
 .searchInput {
-  max-width: 600px;
   width: 100%;
+  max-width: none;
 }
 
 .loadingContainer {
@@ -54,21 +54,21 @@
   .container {
     padding: 16px 0;
   }
-  
+
   .searchContainer {
     margin-bottom: 24px;
-    padding: 0 16px;
+    padding: 0;
   }
-  
+
   .searchInput {
     max-width: 100%;
   }
-  
+
   .loadingContainer,
   .noResultsContainer {
     padding: 60px 16px;
   }
-  
+
   .paginationContainer {
     margin-top: 24px;
     padding: 16px 0;
